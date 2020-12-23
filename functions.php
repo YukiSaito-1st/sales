@@ -21,20 +21,20 @@ function h($s)
 // 売上関連データの取得
 function salesData($input_year, $input_branch, $input_staff, $dbh)
 {
-    $sql = "SELECT *, branches.name AS branch_name, staffs.name AS staff_name FROM staffs 
-            INNER JOIN sales ON staffs.id = sales.staff_id
-            INNER JOIN branches on staffs.branch_id = branches.id WHERE 1";
+    $sql = "SELECT t1.*, t3.name AS branch_name, t2.name AS staff_name FROM sales AS t1
+            INNER JOIN staffs AS t2 ON t2.id = t1.staff_id
+            INNER JOIN branches AS t3 on t2.branch_id = t3.id WHERE 1";
     if(!empty($input_year)) {
-        $sql .= " AND sales.year = :year";
+        $sql .= " AND t1.year = :year";
     }
     if(!empty($input_branch)) {
-        $sql .= " AND branches.id = $input_branch";
+        $sql .= " AND t3.id = $input_branch";
     }
     if(!empty($input_staff)) {
-        $sql .= " AND staffs.id = $input_staff";
+        $sql .= " AND t2.id = $input_staff";
     }
 
-    $sql .= " ORDER BY sales.year, sales.month, branches.id, staffs.id;";
+    $sql .= " ORDER BY t1.year, t1.month, t3.id, t2.id;";
     // プリペアドステートメントの準備
     $stmt = $dbh->prepare($sql);
     // プリペアドステートメントの実行

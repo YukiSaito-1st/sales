@@ -69,6 +69,7 @@ table td{
 .inputs {
     border: 1px solid black;
     width: 160px;
+    padding-left: 10px; 
 }
 
 .btn{
