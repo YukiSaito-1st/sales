@@ -48,7 +48,7 @@ $result_staffs = getStaffs($dbh);
                 <option value="" <?php if(empty($_GET['branch'])) echo 'selected'; ?>></option>
             <?php foreach ($result_branches as $branch) : ?>
                 <option value=<?= $branch['id'] ?>
-                    <?= $_GET['branch'] == $branch['id'] ? 'selected' : ''; ?>><?= $branch['name'] ?></option>
+                    <?php if($_GET['branch'] == $branch['id']) echo 'selected' ; ?>><?= $branch['name'] ?></option>
             <?php endforeach; ?>
             </select>
             </label>
@@ -58,7 +58,7 @@ $result_staffs = getStaffs($dbh);
                 <option value="" <?php if(empty($_GET['staff'])) echo 'selected'; ?>></option>
             <?php foreach ($result_staffs as $staff) : ?> 
                 <option value=<?= $staff['id'] ?> 
-                    <?= $_GET['staff'] == $staff['id'] ? 'selected' : '' ; ?>><?= $staff['name'] ?></option>
+                    <?php if($_GET['staff'] == $staff['id']) echo 'selected' ; ?>><?= $staff['name'] ?></option>
             <?php endforeach; ?>
             </select>
             </label>
@@ -82,20 +82,17 @@ $result_staffs = getStaffs($dbh);
     </thead>
 
     <?php foreach ($result_sales as $sale) :
-    $sale['sale'] = number_format($sale['sale']);
-    echo <<< EOM
+    $sum_sales += $sale['sale']; // 売上額の合計?>
     <tbody>
         <tr>
-            <td>{$sale['year']}</td>
-            <td>{$sale['month']}</td>
-            <td>{$sale['branch_name']}</td>
-            <td>{$sale['staff_name']}</td>
-            <td>{$sale['sale']}</td>
+            <td><?= $sale['year'] ?></td>
+            <td><?= $sale['month'] ?></td>
+            <td><?= $sale['branch_name'] ?></td>
+            <td><?= $sale['staff_name'] ?></td>
+            <td><?= number_format($sale['sale']) ?></td>
         <tr>
     </tbody>
-    EOM;
-        $sum_sales += $sale['sale']; // 売上額の合計
-    endforeach; ?>
+    <?php endforeach; ?>
 </table>
 <h2>合計:<?= number_format($sum_sales) ?>万円</h2>
 </body>

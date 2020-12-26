@@ -23,15 +23,24 @@ function salesData($input_year, $input_branch, $input_staff, $dbh)
 {
     $sql = "SELECT t1.*, t3.name AS branch_name, t2.name AS staff_name FROM sales AS t1
             INNER JOIN staffs AS t2 ON t2.id = t1.staff_id
-            INNER JOIN branches AS t3 on t2.branch_id = t3.id WHERE 1";
+            INNER JOIN branches AS t3 on t2.branch_id = t3.id";
     if(!empty($input_year)) {
-        $sql .= " AND t1.year = :year";
+        $where_sql = " t1.year = :year";
     }
     if(!empty($input_branch)) {
-        $sql .= " AND t3.id = $input_branch";
+        if(!empty($where_sql)) {
+            $where_sql .= " AND";
+        }
+        $where_sql .= " t3.id = $input_branch";
     }
     if(!empty($input_staff)) {
-        $sql .= " AND t2.id = $input_staff";
+        if(!empty($where_sql)) {
+            $where_sql .= " AND";
+        }
+        $where_sql .= " t2.id = $input_staff";
+    }
+    if(!empty($where_sql)) {
+        $sql .= ' WHERE' . $where_sql;
     }
 
     $sql .= " ORDER BY t1.year, t1.month, t3.id, t2.id;";
